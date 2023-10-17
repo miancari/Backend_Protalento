@@ -2,8 +2,10 @@ const express = require('express');
 const server = express();
 const jwt = require('jsonwebtoken');
 const knex = require('knex')
-const knexConfig = require('./knexfile')[process.env.NODE_ENV || 'development']; // Cargamos la configuración adecuada
+const knexConfig = require('./knexfile')[process.env.DEV_DB_HOST || 'development']; // Cargamos la configuración adecuada
 const cors = require('cors')
+
+
 
 const db = knex(knexConfig);
 

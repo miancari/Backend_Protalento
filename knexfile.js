@@ -6,12 +6,12 @@
 module.exports = {
 
   development: {
-    client: 'postgresql',
+    client: 'pg',
     connection: {
       host: process.env.DEV_DB_HOST,
-      database: 'presupuesto_mt2e',
-      user: 'postgres1',
-      password: 'SdBjtlGmeHfM2aV6ZaJn3ShRoydD9Ipf',
+      database: process.env.DEV_DB_DATABASE,
+      user: process.env.DEV_DB_USER,
+      password: process.env.DEV_DB_PASSWORD,
     },
   },
 
