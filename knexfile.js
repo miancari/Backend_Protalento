@@ -12,7 +12,7 @@ module.exports = {
       database: process.env.DEV_DB_DATABASE,
       user: process.env.DEV_DB_USER,
       password: process.env.DEV_DB_PASSWORD,
-    }
+    },
   },
 
   staging: {
