@@ -66,7 +66,7 @@ server.use('/categoria', Routes.CategoriaDeGastos);
 server.use('/ingresos', verificarToken, Routes.Ingresos);
 server.use('/gastos', verificarToken, Routes.Gastos);
 
-function checkDatabaseConnection() {
+/* function checkDatabaseConnection() {
     db.raw('SELECT 1')
         .then(() => {
             console.log('Conexión a la base de datos exitosa');
@@ -78,17 +78,17 @@ function checkDatabaseConnection() {
 }
 
 // Llamar a la función para verificar la conexión a la base de datos.
-checkDatabaseConnection();
+checkDatabaseConnection(); */
 
-server.on('db-connected', () => {
+/* server.on('db-connected', () => {
     server.listen(PORT, () => {
         console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
     });
-});
-
-
-/* server.listen(PORT, () => {
-    console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
 }); */
+
+
+server.listen(PORT, () => {
+    console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
+});
 
 
