@@ -5,6 +5,7 @@ const knex = require('knex')
 const knexConfig = require('./knexfile')['development']; // Cargamos la configuración adecuada
 const cors = require('cors')
 require('dotenv').config();
+const { pool } = require('./pg')
 
 const db = knex(knexConfig);
 
@@ -62,31 +63,28 @@ server.use('/categoria', Routes.CategoriaDeGastos);
 server.use('/ingresos', verificarToken, Routes.Ingresos);
 server.use('/gastos', verificarToken, Routes.Gastos);
 
-function checkDatabaseConnection() {
-    db.raw('SELECT 1')
-        .then(() => {
-            console.log('Conexión a la base de datos exitosa');
-            server.emit('db-connected'); // Emitir el evento personalizado 'db-connected'
-        })
-        .catch(error => {
-            console.error('Error de conexión a la base de datos:', error);
-        });
-}
-
-// Llamar a la función para verificar la conexión a la base de datos.
-checkDatabaseConnection();
-
-server.on('db-connected', () => {
-    server.listen(PORT, () => {
-        console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
-    });
+server.get('/test', async (req, res) => {
+    try {
+        // Intenta ejecutar una consulta simple para verificar la conexión exitosa.
+        const result = await pool.query('SELECT 1');
+        res.send({ message: 'Conexión exitosa a la base de datos' });
+    } catch (error) {
+        console.error('Error de conexión a la base de datos:', error);
+        res.status(500).send({ message: 'Error de conexión a la base de datos' });
+    }
 });
+
+
+server.listen(PORT, () => {
+    console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
+});
+
 
 
 /* server.listen(PORT, () => {
     console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
 });
- */ 
+ */
 
 /* const express = require('express');
 const server = express();
