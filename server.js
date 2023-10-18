@@ -64,7 +64,6 @@ server.use('/ingresos', verificarToken, Routes.Ingresos);
 server.use('/gastos', verificarToken, Routes.Gastos);
 
 server.get('/test', async (req, res) => {
-<<<<<<< HEAD
     try {
         // Intenta ejecutar una consulta simple para verificar la conexión exitosa.
         const result = await pool.query('SELECT 1');
@@ -79,22 +78,6 @@ server.get('/test', async (req, res) => {
 server.listen(PORT, () => {
     console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
 });
-
-
-=======
-    const result = await pool.query('SELECT NOW()');
-    res.send({
-        message:result.rows[0].now
-    });
-})
-
-
-server.listen(PORT, () => {
-    console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
-});
-
-
->>>>>>> c816b044fb650b6b7eb4ae8ad4d6454ad99d92d9
 
 /* server.listen(PORT, () => {
     console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
