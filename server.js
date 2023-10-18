@@ -2,10 +2,9 @@ const express = require('express');
 const server = express();
 const jwt = require('jsonwebtoken');
 const knex = require('knex')
-const knexConfig = require('./knexfile')[process.env.DEV_DB_HOST || 'development']; // Cargamos la configuración adecuada
+const knexConfig = require('./knexfile')['development']; // Cargamos la configuración adecuada
 const cors = require('cors')
-
-
+require('dotenv').config();
 
 const db = knex(knexConfig);
 
@@ -13,16 +12,11 @@ const PORT = 5000;
 
 const Routes = require('./routes/Index');
 
-server.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-    next();
-});
+server.use(cors());
 
 server.use(express.json());
 
-const secretKey = 'CastroRoa';
+const secretKey = process.env.SECRET_KEY;
 
 function verificarToken(req, res, next) {
     const token = req.header('Authorization');
@@ -68,7 +62,7 @@ server.use('/categoria', Routes.CategoriaDeGastos);
 server.use('/ingresos', verificarToken, Routes.Ingresos);
 server.use('/gastos', verificarToken, Routes.Gastos);
 
-/* function checkDatabaseConnection() {
+function checkDatabaseConnection() {
     db.raw('SELECT 1')
         .then(() => {
             console.log('Conexión a la base de datos exitosa');
@@ -80,17 +74,96 @@ server.use('/gastos', verificarToken, Routes.Gastos);
 }
 
 // Llamar a la función para verificar la conexión a la base de datos.
-checkDatabaseConnection(); */
+checkDatabaseConnection();
 
-/* server.on('db-connected', () => {
+server.on('db-connected', () => {
     server.listen(PORT, () => {
         console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
     });
-}); */
-
-
-server.listen(PORT, () => {
-    console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
 });
 
+
+/* server.listen(PORT, () => {
+    console.log(`😇😇Iniciando servidor en el puerto ${PORT}😇😇`);
+});
+ */ 
+
+/* const express = require('express');
+const server = express();
+const jwt = require('jsonwebtoken');
+const knex = require('knex');
+const knexConfig = require('./knexfile')['development'];
+const cors = require('cors');
+require('dotenv').config();
+
+// Configurar Knex
+const db = knex(knexConfig);
+const Routes = require('./routes/Index');
+
+const PORT = 5000;
+const secretKey = process.env.SECRET_KEY //|| 'YourSecretKeyHere'; // Utiliza una clave segura y guárdala en una variable de entorno
+
+server.use(cors());
+server.use(express.json());
+
+// Middleware para verificar token JWT
+function verificarToken(req, res, next) {
+    const token = req.header('Authorization');
+
+    if (token) {
+        const accessToken = token.split(' ')[1];
+
+        jwt.verify(accessToken, secretKey, (error, decode) => {
+            if (error) {
+                return res.status(401).send({ mensaje: 'Token inválido' });
+            }
+            next();
+        });
+    } else {
+        res.status(401).json({ mensaje: 'Falta token de autenticación' });
+    }
+}
+
+// Ruta de inicio de sesión para generar tokens JWT
+server.post('/login', async (req, res) => {
+    const { correo_electronico, contraseña } = req.body;
+
+    try {
+        const user = await db('Usuarios').where({ correo_electronico, contraseña }).first();
+
+        if (user) {
+            const payload = { correo_electronico: user.correo_electronico };
+            const token = jwt.sign(payload, secretKey, { expiresIn: '5m' });
+
+            return res.json({ token });
+        }
+
+        return res.status(401).json({ message: 'Credenciales inválidas' });
+    } catch (error) {
+        console.error('Error al autenticar:', error);
+        res.status(500).json({ message: 'Error interno del servidor' });
+    }
+});
+
+// Rutas que requieren autenticación
+server.use('/usuario', verificarToken, Routes.Usuarios);
+server.use('/categoria', verificarToken, Routes.CategoriaDeGastos);
+server.use('/ingresos', verificarToken, Routes.Ingresos);
+server.use('/gastos', verificarToken, Routes.Gastos);
+
+// Comprobación de la conexión a la base de datos
+function checkDatabaseConnection() {
+    db.raw('SELECT 1')
+        .then(() => {
+            console.log('Conexión a la base de datos exitosa');
+            server.listen(PORT, () => {
+                console.log(`Iniciando servidor en el puerto ${PORT}`);
+            });
+        })
+        .catch(error => {
+            console.error('Error de conexión a la base de datos:', error);
+        });
+}
+
+checkDatabaseConnection(); */
 
