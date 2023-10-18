@@ -2,12 +2,12 @@ const express = require('express');
 const server = express();
 const jwt = require('jsonwebtoken');
 const knex = require('knex')
-const knexConfig = require('./knexfile')['development']; // Cargamos la configuración adecuada
+const knexConfig = require('./knexfile'); // Cargamos la configuración adecuada
 const cors = require('cors')
 require('dotenv').config();
 const { pool } = require('./pg')
 
-const db = knex(knexConfig);
+const db = knex(knexConfig.development);
 
 const PORT = 5000;
 

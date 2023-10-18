@@ -9,9 +9,9 @@ module.exports = {
     client: 'pg',
     connection: {
       host: process.env.DEV_DB_HOST,
-      database: 'presupuesto_mt2e',
-      user: 'postgres1',
-      password: 'SdBjtlGmeHfM2aV6ZaJn3ShRoydD9Ipf',
+      database: 'presupuesto_7use',
+      user: 'posgrest',
+      password: 'mtxGAeejzIv0X1xLDbCutFcBVkpd44hQ',
     },
   },
 
